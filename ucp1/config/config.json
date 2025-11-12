@@ -1,0 +1,11 @@
+
+{
+  "development": {
+    "username": "root",
+    "password": "kikaho86",
+    "database": "EcomJaya",
+    "host": "127.0.0.1",
+    "port": 3309,
+    "dialect": "mysql"
+  }
+}
