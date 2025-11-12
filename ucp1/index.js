@@ -97,3 +97,20 @@ app.delete('/produk/:id', async (req, res) => {
   }
 });
 
+
+
+db.sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Koneksi database (EcomJaya) berhasil.');
+    return db.sequelize.sync(); 
+  })
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Server berjalan di http://localhost:${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Koneksi database atau sinkronisasi gagal:', err);
+    process.exit(1);
+  });
