@@ -30,3 +30,53 @@ app.post('/produk', async (req, res) => {
     res.status(500).json({ error: 'Gagal menambahkan produk', details: error.message });
   }
 });
+
+app.get('/produk', async (req, res) => {
+  try {
+    const semuaProduk = await db.produk.findAll();
+    res.status(200).json(semuaProduk);
+  } catch (error) {
+    console.error('GET /produk error:', error);
+    res.status(500).json({ error: 'Gagal mengambil data produk' });
+  }
+});
+
+
+app.get('/produk/:id', async (req, res) => {
+  const produkId = req.params.id;
+  try {
+    const produk = await db.produk.findByPk(produkId);
+    if (!produk) {
+      return res.status(404).json({ error: 'Produk tidak ditemukan' });
+    }
+    res.status(200).json(produk);
+  } catch (error) {
+    console.error(`GET /produk/${produkId} error:`, error);
+    res.status(500).json({ error: 'Gagal mengambil data produk' });
+  }
+});
+
+app.put('/produk/:id', async (req, res) => {
+  const produkId = req.params.id;
+  const { nama_produk, harga, stok, kategori, tanggal_rilis } = req.body;
+
+  try {
+    const produk = await db.produk.findByPk(produkId);
+    if (!produk) {
+      return res.status(404).json({ error: 'Produk tidak ditemukan' });
+    }
+
+    await produk.update({
+      nama_produk,
+      harga,
+      stok,
+      kategori,
+      tanggal_rilis
+    });
+    
+    res.status(200).json(produk);
+  } catch (error) {
+    console.error(`PUT /produk/${produkId} error:`, error);
+    res.status(500).json({ error: 'Gagal memperbarui data produk' });
+  }
+});
