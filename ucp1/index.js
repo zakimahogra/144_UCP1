@@ -80,3 +80,20 @@ app.put('/produk/:id', async (req, res) => {
     res.status(500).json({ error: 'Gagal memperbarui data produk' });
   }
 });
+
+app.delete('/produk/:id', async (req, res) => {
+  const produkId = req.params.id;
+  try {
+    const produk = await db.produk.findByPk(produkId);
+    if (!produk) {
+      return res.status(404).json({ error: 'Produk tidak ditemukan' });
+    }
+
+    await produk.destroy();
+    res.status(200).json({ message: 'Produk berhasil dihapus' });
+  } catch (error) {
+    console.error(`DELETE /produk/${produkId} error:`, error);
+    res.status(500).json({ error: 'Gagal menghapus data produk' });
+  }
+});
+
